@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- A complete page used for testing what verbs given webserver can respond to, as well as what verbs given platform can emit.
+    Useful for creating / testing APIs and when using new browser/js renderer. Includes IE5+ variant and no additional library.-->
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Test page for vraious HTTP verbs</title>
+    </head>
+    <body>
+        <h2>Testing following http verbs against this server...</h2>
+        <p>optionaly, please include subadress to be used (excluding first slash): <input id="subdir" type="text"></p>
+        <p>Test of HTTP GET verb: <pre id="GET">none</pre></p>
+        <p>Test of HTTP POST verb: <pre id="POST">none</pre></p>
+        <p>Test of HTTP PUT verb: <pre id="PUT">none</pre></p>
+        <p>Test of HTTP UPDATE verb: <pre id="UPDATE">none</pre></p>
+        <p>Test of HTTP DELETE verb: <pre id="DELETE">none</pre></p>
+        <button onclick="xhttptest()">Begin test!</button>
+        <script>
+            function xhttptest() {
+                var methods = ["GET", "POST", "PUT", "UPDATE", "DELETE"];
+                var xhttp;
+
+                if (window.XMLHttpRequest) {
+                    xhttp = new XMLHttpRequest();
+                } else {
+                    // code for IE6, IE5
+                    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                };
+
+                for (var used = 0; used < methods.length; used++) {
+                    xhttp.open(methods[used], "/" + document.getElementById("subdir").value.toString(), false);
+                    xhttp.send();
+                    if (xhttp.readyState == 4 && xhttp.status == 200)
+                        document.getElementById(methods[used]).innerHTML = "Ok";
+                    if (xhttp.readyState == 4 && xhttp.status == 405)
+                        document.getElementById(methods[used]).innerHTML = "Not allowed";
+                };
+            };
+        </script>
+    </body>
+</html>
